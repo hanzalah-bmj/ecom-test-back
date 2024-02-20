@@ -1,10 +1,28 @@
-const express = require ('express');
-const cors = require ('cors');
+const express = require('express');
+const cors = require('cors');
 const app = express();
+const cookieParser = require('cookie-parser');
+const crypto = require('crypto');
+const session = require('express-session');
 const port = 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+
+const generateSecretKey = () => {
+  return crypto.randomBytes(32).toString('hex');
+};
+
+app.use(
+  session({
+    secret: generateSecretKey(),
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Set secure to true in a production environment with HTTPS
+  })
+);
+
 const users = [
     {
         fullName: "Hanzalah",
@@ -18,7 +36,7 @@ const users = [
         userName: "Salman",
         emailAddress: "salman@gmail.com",
         pwd: "123",
-        userRole : "Costumer"
+        userRole : "Customer"
     }
 
 ];
@@ -81,6 +99,7 @@ app.listen(port, () => {
 app.post('/signin', (req, res) => {
     const found = users.find((items) => { return items.userName == req.body.userName && items.pwd == req.body.pwd });
     if (found) {
+        req.session.user = found;
         res.json(found);
     }
     else {
