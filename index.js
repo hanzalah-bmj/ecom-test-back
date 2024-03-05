@@ -8,20 +8,6 @@ const port = 5000;
 
 app.use(cors());
 app.use(express.json());
-app.use(cookieParser());
-
-const generateSecretKey = () => {
-  return crypto.randomBytes(32).toString('hex');
-};
-
-app.use(
-  session({
-    secret: generateSecretKey(),
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }, // Set secure to true in a production environment with HTTPS
-  })
-);
 
 const users = [
     {
