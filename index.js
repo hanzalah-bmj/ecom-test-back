@@ -9,6 +9,14 @@ const port = 5000;
 app.use(cors());
 app.use(express.json());
 
+const corsOptions = {
+  origin: 'http://brandsonline.pk', // Update this to the actual domain of your React app
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
+
 const users = [
     {
         fullName: "Hanzalah",
